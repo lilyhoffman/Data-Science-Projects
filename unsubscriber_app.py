@@ -140,3 +140,5 @@ def main():
         else:
             st.error("Excel file must contain the column header 'Preference Center URL'")
 
+if __name__ == "__main__":
+    main()
