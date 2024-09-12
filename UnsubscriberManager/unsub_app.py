@@ -99,9 +99,10 @@ def process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program F
 
 
 def main():
-    st.title('URL Processor')
 
-    st.write("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
+    st.title('UKG Unsubscribe Assistant')
+    st.write("Automates the process of unsubscribing users from UKG promotional emails.")
+    st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
     uploaded_file = st.file_uploader("Choose an Excel file", type=["xlsx", "xls"])
 
     if uploaded_file:
@@ -135,9 +136,9 @@ def main():
             end_row = st.number_input("End Row", min_value=0, value=len(df), max_value=len(df))
 
             if st.button('Process URLs'):
-                st.write("Processing URLs...")
-                process_urls(df, start_row, end_row)
-                st.write("Processing complete!")
+                with st.spinner("Processing URLs..."):
+                    process_urls(df, start_row, end_row)
+                st.success("Processing complete!")
         else:
             st.error("Excel file must contain the column header 'Preference Center URL'")
 
