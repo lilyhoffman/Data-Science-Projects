@@ -14,7 +14,7 @@ import traceback
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback, pause_event):
+def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
     service = FirefoxService(executable_path=gecko_path)
@@ -62,12 +62,6 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
 
                     progress_callback(total_urls_processed, total_urls)
                     time.sleep(2)
-
-                    # Check if process is paused
-                    if pause_event['paused']:
-                        while pause_event['paused']:
-                            time.sleep(1)
-
                 except Exception as inner_e:
                     logging.error(f"Error processing {url}: {inner_e}")
 
@@ -84,7 +78,7 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
 
 
 def upload_page():
-    st.title('UKG Unsubscribe Assistant')
+    st.title('Unsubscribe Assistant')
     st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
 
     col1, col2 = st.columns([2, 1])
@@ -127,14 +121,7 @@ def upload_page():
         with col2:
             end_row = st.number_input("End Row", min_value=0, value=len(df), max_value=len(df))
 
-        # Initialize session state variables for pause/resume
-        if 'paused' not in st.session_state:
-            st.session_state.paused = False
-        if 'process_started' not in st.session_state:
-            st.session_state.process_started = False
-
-        if st.button('Start/Resume Processing'):
-            st.session_state.process_started = True
+        if st.button('Process URLs'):
             progress_bar = st.progress(0)
             status_text = st.empty()
 
@@ -143,50 +130,28 @@ def upload_page():
                 progress_bar.progress(progress)
                 status_text.text(f"Processing {processed} of {total} URLs")
 
-            def pause_process():
-                st.session_state.paused = True
-
-            def resume_process():
-                st.session_state.paused = False
-
-            if st.session_state.process_started:
-                with st.spinner("Processing URLs..."):
-                    try:
-                        urls_processed = process_urls(df, start_row, end_row, batch_size=10,
-                                                      gecko_path='C:/Program Files/geckodriver.exe',
-                                                      col_name='Preference Center URL',
-                                                      progress_callback=update_progress,
-                                                      pause_event={'paused': st.session_state.paused})
-                        st.success(f"Processing complete!")
-                    except Exception as e:
-                        st.error(f"Error during processing: {e}")
-
-        if st.session_state.process_started:
-            if st.button('Pause Processing'):
-                pause_process()
-
-            if st.button('Resume Processing'):
-                resume_process()
-
-
-def main():
-    # st.sidebar.image(image="images/ukg.webp", use_column_width=True)
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
-
-    if page == "Upload":
-        upload_page()
-    elif page == "About":
-        about_page()
+            with st.spinner("Processing URLs..."):
+                try:
+                    # urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
+                    urls_processed = process_urls(df,
+                                                  start_row,
+                                                  end_row,
+                                                  batch_size=10,
+                                                  gecko_path='./bin/geckodriver.exe',
+                                                  col_name='Preference Center URL',
+                                                  progress_callback=update_progress)
+                    st.success(f"Processing complete!")
+                except Exception as e:
+                    st.error(f"Error during processing: {e}")
 
 
 def about_page():
     st.title('About')
     st.write("""\
-        This application automates the process of unsubscribing users from UKG promotional emails. 
-        You can upload an Excel file containing URLs, and the tool will process these URLs to 
-        unsubscribe users efficiently. It is designed to streamline the workflow for the Marketing 
-        Operations Team and expedite the unsubscribing process.
+         This application automates the process of unsubscribing users from Company X's promotional emails. 
+         You can upload an Excel file containing URLs, and the tool will process these URLs to unsubscribe 
+         users efficiently. After noticing a repetitive task that my team members frequently performed, 
+         I designed this tool to streamline their workflow and expedite the unsubscribing process.
         """)
 
     st.subheader('Features')
@@ -195,21 +160,32 @@ def about_page():
     - Process URLs to interact with web elements
     - Track processing status with logs
     """)
-
     st.title('Fix List')
     st.write("""\
         - Interrupt the Program (please do not try more than 3 or 4 urls right now, otherwise you will need to restart your laptop)
         - Add other buttons/functions that could be user-friendly
+        - stop/pause button
+        - silence the pinging
 
     """)
     st.title('Contact')
     st.write("""\
         If you have any questions or need support, please contact:
 
-        **Email:** lily.hoffman@ukg.com
+        **Email:** lilynaavhoffman@gmail.com
 
     """)
-    st.success("Developed by: Lily Hoffman (Marketing Operations Intern)")
+    st.success("Developed by: Lily Hoffman")
+
+
+def main():
+    st.sidebar.title("Navigation")
+    page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
+
+    if page == "Upload":
+        upload_page()
+    elif page == "About":
+        about_page()
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
-    service = FirefoxService(executable_path=gecko_path)
+    service = FirefoxService(service=gecko_path)
     driver = webdriver.Firefox(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)

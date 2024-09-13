@@ -3,3 +3,4 @@ streamlit
 selenium==4.6.0
 openpyxl
 webdriver-manager
+seleniumbase
