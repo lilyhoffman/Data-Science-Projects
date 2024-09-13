@@ -13,6 +13,7 @@ import traceback
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
@@ -75,8 +76,9 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
 
     return total_urls_processed
 
+
 def upload_page():
-    st.title('UKG Unsubscribe Assistant')
+    st.title('Unsubscribe Assistant')
     st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
 
     col1, col2 = st.columns([2, 1])
@@ -139,10 +141,10 @@ def upload_page():
 def about_page():
     st.title('About')
     st.write("""\
-        This application automates the process of unsubscribing users from UKG promotional emails. 
-        You can upload an Excel file containing URLs, and the tool will process these URLs to 
-        unsubscribe users efficiently. It is designed to streamline the workflow for the Marketing 
-        Operations Team and expedite the unsubscribing process.
+         This application automates the process of unsubscribing users from Company X's promotional emails. 
+         You can upload an Excel file containing URLs, and the tool will process these URLs to unsubscribe 
+         users efficiently. After noticing a repetitive task that my team members frequently performed, 
+         I designed this tool to streamline their workflow and expedite the unsubscribing process.
         """)
 
     st.subheader('Features')
@@ -155,20 +157,21 @@ def about_page():
     st.write("""\
         - Interrupt the Program (please do not try more than 3 or 4 urls right now, otherwise you will need to restart your laptop)
         - Add other buttons/functions that could be user-friendly
+        - stop/pause button
+        - silence the pinging
 
     """)
     st.title('Contact')
     st.write("""\
         If you have any questions or need support, please contact:
 
-        **Email:** lily.hoffman@ukg.com
+        **Email:** lilynaavhoffman@gmail.com
 
     """)
-    st.success("Developed by: Lily Hoffman (Marketing Operations Intern)")
+    st.success("Developed by: Lily Hoffman")
 
 
 def main():
-    # st.sidebar.image(image="images/ukg.webp", use_column_width=True)
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
 
