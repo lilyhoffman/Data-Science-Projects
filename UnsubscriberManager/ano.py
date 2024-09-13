@@ -9,14 +9,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import traceback
+from selenium.webdriver.firefox.service import Service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
+
+def process_urls(df, start_row, end_row, batch_size, firefox_binary_path, col_name, progress_callback):
     options = Options()
+
+    firefox_binary_path = './bin/geckodriver32.exe'
     options.add_argument("--headless")
-    service = FirefoxService(executable_path=gecko_path)
+    service = Service(service=firefox_binary_path)
     driver = webdriver.Firefox(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
@@ -75,8 +79,9 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
 
     return total_urls_processed
 
+
 def upload_page():
-    st.title('UKG Unsubscribe Assistant')
+    st.title('Unsubscribe Assistant')
     st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
 
     col1, col2 = st.columns([2, 1])
@@ -123,7 +128,6 @@ def upload_page():
             progress_bar = st.progress(0)
             status_text = st.empty()
 
-
             def update_progress(processed, total):
                 progress = processed / total
                 progress_bar.progress(progress)
@@ -131,7 +135,14 @@ def upload_page():
 
             with st.spinner("Processing URLs..."):
                 try:
-                    urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
+                    # urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
+                    urls_processed = process_urls(df,
+                                                  start_row,
+                                                  end_row,
+                                                  batch_size=10,
+                                                  firefox_binary_path='./bin/geckodriver32.exe',
+                                                  col_name='Preference Center URL',
+                                                  progress_callback=update_progress)
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
@@ -140,10 +151,10 @@ def upload_page():
 def about_page():
     st.title('About')
     st.write("""\
-        This application automates the process of unsubscribing users from UKG promotional emails. 
-        You can upload an Excel file containing URLs, and the tool will process these URLs to 
-        unsubscribe users efficiently. It is designed to streamline the workflow for the Marketing 
-        Operations Team and expedite the unsubscribing process.
+         This application automates the process of unsubscribing users from Company X's promotional emails. 
+         You can upload an Excel file containing URLs, and the tool will process these URLs to unsubscribe 
+         users efficiently. After noticing a repetitive task that my team members frequently performed, 
+         I designed this tool to streamline their workflow and expedite the unsubscribing process.
         """)
 
     st.subheader('Features')
@@ -156,20 +167,21 @@ def about_page():
     st.write("""\
         - Interrupt the Program (please do not try more than 3 or 4 urls right now, otherwise you will need to restart your laptop)
         - Add other buttons/functions that could be user-friendly
+        - stop/pause button
+        - silence the pinging
 
     """)
     st.title('Contact')
     st.write("""\
         If you have any questions or need support, please contact:
 
-        **Email:** lily.hoffman@ukg.com
+        **Email:** lilynaavhoffman@gmail.com
 
     """)
-    st.success("Developed by: Lily Hoffman (Marketing Operations Intern)")
+    st.success("Developed by: Lily Hoffman")
 
 
 def main():
-    # st.sidebar.image(image="images/ukg.webp", use_column_width=True)
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
 
@@ -177,6 +189,7 @@ def main():
         upload_page()
     elif page == "About":
         about_page()
+
 
 if __name__ == "__main__":
     main()

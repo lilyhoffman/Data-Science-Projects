@@ -132,7 +132,14 @@ def upload_page():
 
             with st.spinner("Processing URLs..."):
                 try:
-                    urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
+                    # urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
+                    urls_processed = process_urls(df,
+                                                  start_row,
+                                                  end_row,
+                                                  batch_size=10,
+                                                  gecko_path='./bin/geckodriver.exe',
+                                                  col_name='Preference Center URL',
+                                                  progress_callback=update_progress)
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
