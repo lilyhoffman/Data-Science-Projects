@@ -170,7 +170,7 @@ def upload_page():
 
 
 def main():
-    st.sidebar.image(image="ukg.webp", use_column_width=True)
+    st.sidebar.image(image="images/ukg.webp", use_column_width=True)
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
 
