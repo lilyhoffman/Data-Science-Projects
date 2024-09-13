@@ -20,7 +20,7 @@ def process_urls(df, start_row, end_row, batch_size, firefox_binary_path, col_na
 
     firefox_binary_path = './bin/geckodriver32.exe'
     options.add_argument("--headless")
-    service = Service(service=firefox_binary_path)
+    service = Service(executable_path=firefox_binary_path)
     driver = webdriver.Firefox(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
