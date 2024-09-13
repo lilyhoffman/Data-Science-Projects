@@ -13,7 +13,8 @@ import traceback
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
+
+def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback, pause_event):
     options = Options()
     options.add_argument("--headless")
     service = FirefoxService(executable_path=gecko_path)
@@ -61,6 +62,12 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
 
                     progress_callback(total_urls_processed, total_urls)
                     time.sleep(2)
+
+                    # Check if process is paused
+                    if pause_event['paused']:
+                        while pause_event['paused']:
+                            time.sleep(1)
+
                 except Exception as inner_e:
                     logging.error(f"Error processing {url}: {inner_e}")
 
@@ -74,6 +81,7 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
         logging.info(f"Total URLs processed: {total_urls_processed}")
 
     return total_urls_processed
+
 
 def upload_page():
     st.title('UKG Unsubscribe Assistant')
@@ -119,22 +127,57 @@ def upload_page():
         with col2:
             end_row = st.number_input("End Row", min_value=0, value=len(df), max_value=len(df))
 
-        if st.button('Process URLs'):
+        # Initialize session state variables for pause/resume
+        if 'paused' not in st.session_state:
+            st.session_state.paused = False
+        if 'process_started' not in st.session_state:
+            st.session_state.process_started = False
+
+        if st.button('Start/Resume Processing'):
+            st.session_state.process_started = True
             progress_bar = st.progress(0)
             status_text = st.empty()
-
 
             def update_progress(processed, total):
                 progress = processed / total
                 progress_bar.progress(progress)
                 status_text.text(f"Processing {processed} of {total} URLs")
 
-            with st.spinner("Processing URLs..."):
-                try:
-                    urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
-                    st.success(f"Processing complete!")
-                except Exception as e:
-                    st.error(f"Error during processing: {e}")
+            def pause_process():
+                st.session_state.paused = True
+
+            def resume_process():
+                st.session_state.paused = False
+
+            if st.session_state.process_started:
+                with st.spinner("Processing URLs..."):
+                    try:
+                        urls_processed = process_urls(df, start_row, end_row, batch_size=10,
+                                                      gecko_path='C:/Program Files/geckodriver.exe',
+                                                      col_name='Preference Center URL',
+                                                      progress_callback=update_progress,
+                                                      pause_event={'paused': st.session_state.paused})
+                        st.success(f"Processing complete!")
+                    except Exception as e:
+                        st.error(f"Error during processing: {e}")
+
+        if st.session_state.process_started:
+            if st.button('Pause Processing'):
+                pause_process()
+
+            if st.button('Resume Processing'):
+                resume_process()
+
+
+def main():
+    st.sidebar.image(image="ukg.webp", use_column_width=True)
+    st.sidebar.title("Navigation")
+    page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
+
+    if page == "Upload":
+        upload_page()
+    elif page == "About":
+        about_page()
 
 
 def about_page():
@@ -152,6 +195,7 @@ def about_page():
     - Process URLs to interact with web elements
     - Track processing status with logs
     """)
+
     st.title('Fix List')
     st.write("""\
         - Interrupt the Program (please do not try more than 3 or 4 urls right now, otherwise you will need to restart your laptop)
@@ -167,16 +211,6 @@ def about_page():
     """)
     st.success("Developed by: Lily Hoffman (Marketing Operations Intern)")
 
-
-def main():
-    st.sidebar.image(image="ukg.webp", use_column_width=True)
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
-
-    if page == "Upload":
-        upload_page()
-    elif page == "About":
-        about_page()
 
 if __name__ == "__main__":
     main()

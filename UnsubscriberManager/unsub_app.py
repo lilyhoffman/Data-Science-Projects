@@ -8,125 +8,87 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import traceback
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
-def process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe',
-                 col_name='Preference Center URL'):
-    # Create a new Firefox WebDriver instance with headless option
+def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
     options = Options()
-    options.add_argument("--headless")  # Run Firefox in headless mode
-
+    options.add_argument("--headless")
     service = FirefoxService(executable_path=gecko_path)
     driver = webdriver.Firefox(service=service, options=options)
 
-    # Define total batches needed
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
-
-    # Counter for URLs processed
+    total_urls = end_row - start_row
     total_urls_processed = 0
 
     try:
         for batch_num in range(total_batches):
             start_index = start_row + batch_num * batch_size
             end_index = min(start_row + (batch_num + 1) * batch_size, end_row)
-
-            # Get the batch of URLs
             batch_df = df.iloc[start_index:end_index]
 
             logging.info(f"Processing Batch {batch_num + 1}/{total_batches}")
 
             for index, row in batch_df.iterrows():
+                url_index = start_index + index - start_index + 1
                 url = row[col_name]
                 try:
-                    # Navigate to the webpage
                     driver.get(url)
-
-                    # Wait for the page to load completely
                     WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.ID, 'edit-global-unsubscribe1'))
                     )
-
-                    # Get the height of the entire page
                     total_height = driver.execute_script("return document.body.scrollHeight")
-
-                    # Calculate the scroll position to bring the checkbox closer to the middle-bottom
-                    scroll_position = total_height * 0.40  # Adjust this proportion as needed
-
-                    # Scroll to the calculated position
+                    scroll_position = total_height * 0.40
                     driver.execute_script(f"window.scrollTo(0, {scroll_position});")
-
-                    # Optionally, wait for a few seconds to ensure the page has scrolled
-                    time.sleep(1)  # Adjust the sleep time as necessary
-
-                    # Wait for the checkbox to be present and interactable
+                    time.sleep(1)
                     checkbox = WebDriverWait(driver, 10).until(
                         EC.element_to_be_clickable((By.ID, 'edit-global-unsubscribe1'))
                     )
-
-                    # Check if the checkbox is not already selected
                     if not checkbox.is_selected():
                         checkbox.click()
                         logging.info(f"Checkbox clicked successfully on {url}")
                     else:
                         logging.info(f"Checkbox already selected on {url}")
-
-                    # Wait for a brief moment to ensure the click is registered
-                    time.sleep(1)  # Adjust the sleep time as necessary
-
-                    # Wait for the submit button to be present and interactable
+                    time.sleep(1)
                     submit_button = WebDriverWait(driver, 10).until(
                         EC.element_to_be_clickable((By.ID, 'edit-actions-submit'))
                     )
                     submit_button.click()
                     logging.info(f"Button clicked successfully on {url}")
-
-                    # Update the counter for processed URLs
                     total_urls_processed += 1
 
-                    # Wait for a few seconds before navigating to the next URL
-                    time.sleep(2)  # Adjust the sleep time as necessary
-
+                    progress_callback(total_urls_processed, total_urls)
+                    time.sleep(2)
                 except Exception as inner_e:
                     logging.error(f"Error processing {url}: {inner_e}")
 
             logging.info(f"Batch {batch_num + 1}/{total_batches} completed.\n")
 
     except Exception as e:
-        logging.error("Error:", e)
+        logging.error(f"Error processing URLs: {traceback.format_exc()}")
 
     finally:
-        # Close the browser window
         driver.quit()
-        # Log the total number of URLs processed
         logging.info(f"Total URLs processed: {total_urls_processed}")
 
-    # Return the number of URLs processed
     return total_urls_processed
-
 
 def upload_page():
     st.title('UKG Unsubscribe Assistant')
-    # st.write("Automates the process of unsubscribing users from UKG promotional emails.")
     st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
 
-    # Layout for file uploader and sheet selector with wider column for file uploader
-    col1, col2 = st.columns([2, 1])  # Wider column for file uploader
+    col1, col2 = st.columns([2, 1])
 
     with col1:
-        # File Uploader
         uploaded_file = st.file_uploader("Choose an Excel file", type=["xlsx", "xls"])
 
     with col2:
         if uploaded_file:
             try:
-                # Read Excel File
-                df = pd.read_excel(uploaded_file, sheet_name=None)  # Read all sheets
+                df = pd.read_excel(uploaded_file, sheet_name=None)
                 sheet_names = df.keys()
-
-                # Sheet Selector
                 sheet_name = st.selectbox("Select sheet", sheet_names)
                 df = df[sheet_name]
             except Exception as e:
@@ -135,7 +97,6 @@ def upload_page():
         else:
             sheet_name = None
 
-    # Check DataFrame Validity
     if uploaded_file and sheet_name:
         if df.empty:
             st.error("Uploaded Excel file is empty or not formatted correctly.")
@@ -146,13 +107,11 @@ def upload_page():
 
         st.success("Excel file uploaded.")
 
-        # Display DataFrame in a separate section
         st.subheader("Content of the Uploaded Excel File")
         st.dataframe(df)
 
-        # Layout for Start Row and End Row inputs next to each other
         st.subheader("Rows to Process")
-        col1, col2 = st.columns([1, 1])  # Equal width columns
+        col1, col2 = st.columns([1, 1])
 
         with col1:
             start_row = st.number_input("Start Row", min_value=0, value=0)
@@ -161,15 +120,25 @@ def upload_page():
             end_row = st.number_input("End Row", min_value=0, value=len(df), max_value=len(df))
 
         if st.button('Process URLs'):
-            with st.spinner("Processing URLs..."):
-                urls_processed = process_urls(df, start_row, end_row)
-            st.success(f"Processing complete! Total URLs processed: {urls_processed}")
+            progress_bar = st.progress(0)
+            status_text = st.empty()
 
+            def update_progress(processed, total):
+                progress = processed / total
+                progress_bar.progress(progress)
+                status_text.text(f"Processing {processed} of {total} URLs")
+
+            with st.spinner("Processing URLs..."):
+                try:
+                    urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
+                    st.success(f"Processing complete!")
+                except Exception as e:
+                    st.error(f"Error during processing: {e}")
 
 
 def about_page():
     st.title('About')
-    st.write("""
+    st.write("""\
         This application automates the process of unsubscribing users from UKG promotional emails. 
         You can upload an Excel file containing URLs, and the tool will process these URLs to 
         unsubscribe users efficiently. It is designed to streamline the workflow for the Marketing 
@@ -177,19 +146,19 @@ def about_page():
         """)
 
     st.subheader('Features')
-    st.markdown("""
+    st.markdown("""\
     - Upload and select sheets from Excel files
     - Process URLs to interact with web elements
     - Track processing status with logs
     """)
     st.title('Fix List')
-    st.write("""
+    st.write("""\
         - Interrupt the Program (please do not try more than 3 or 4 urls right now, otherwise you will need to restart your laptop)
         - Add other buttons/functions that could be user-friendly
 
     """)
     st.title('Contact')
-    st.write("""
+    st.write("""\
         If you have any questions or need support, please contact:
 
         **Email:** lily.hoffman@ukg.com
@@ -200,17 +169,13 @@ def about_page():
 
 def main():
     st.sidebar.image(image="ukg.webp", use_column_width=True)
-    # Sidebar for navigation
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
 
-
-    # Show the selected page
     if page == "Upload":
         upload_page()
     elif page == "About":
         about_page()
-
 
 if __name__ == "__main__":
     main()
