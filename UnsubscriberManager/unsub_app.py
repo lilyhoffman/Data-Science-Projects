@@ -151,7 +151,7 @@ def upload_page():
         st.dataframe(df)
 
         # Layout for Start Row and End Row inputs next to each other
-        st.subheader("Rows to Process:")
+        st.subheader("Rows to Process")
         col1, col2 = st.columns([1, 1])  # Equal width columns
 
         with col1:
@@ -170,15 +170,17 @@ def upload_page():
 def about_page():
     st.title('About')
     st.write("""
-        This application helps automate the process of unsubscribing users from UKG promotional emails. 
-        It allows you to upload an Excel file with URLs and process them to unsubscribe users.
+        This application automates the process of unsubscribing users from UKG promotional emails. 
+        You can upload an Excel file containing URLs, and the tool will process these URLs to 
+        unsubscribe users efficiently. It is designed to streamline the workflow for the Marketing 
+        Operations Team and expedite the unsubscribing process.
+        """)
 
-        **Features:**
-        - Upload and select sheets from Excel files
-        - Process URLs to interact with web elements
-        - Track processing status with logs
-
-        **Developed by:** Lily Hoffman (Marketing Operations Intern)
+    st.subheader('Features')
+    st.markdown("""
+    - Upload and select sheets from Excel files
+    - Process URLs to interact with web elements
+    - Track processing status with logs
     """)
     st.title('Fix List')
     st.write("""
@@ -193,6 +195,7 @@ def about_page():
         **Email:** lily.hoffman@ukg.com
 
     """)
+    st.success("Developed by: Lily Hoffman (Marketing Operations Intern)")
 
 
 def main():
