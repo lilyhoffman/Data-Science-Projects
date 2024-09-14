@@ -166,6 +166,7 @@ def about_page():
         - Add other buttons/functions that could be user-friendly
         - stop/pause button
         - silence the pinging
+        - ISSUE WITH DRIVER (last step you should do, add stop/pause button, silence ping first)
 
     """)
     st.title('Contact')
