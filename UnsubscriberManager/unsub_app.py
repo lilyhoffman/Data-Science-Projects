@@ -10,6 +10,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import traceback
 
+
+
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -17,6 +20,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
+
+    # Add a preference to mute audio
+    options.set_preference("media.volume_scale", "0.0")
+
     service = FirefoxService(service=gecko_path)
     driver = webdriver.Firefox(service=service, options=options)
 
@@ -121,7 +128,11 @@ def upload_page():
         with col2:
             end_row = st.number_input("End Row", min_value=0, value=len(df), max_value=len(df))
 
-        if st.button('Process URLs'):
+        if st.button('Stop Current Process'):
+            st.error(f"Stopped.")
+            st.stop()
+
+        if st.button('Click to Process URLs'):
             progress_bar = st.progress(0)
             status_text = st.empty()
 
@@ -132,7 +143,6 @@ def upload_page():
 
             with st.spinner("Processing URLs..."):
                 try:
-                    # urls_processed = process_urls(df, start_row, end_row, batch_size=10, gecko_path='C:/Program Files/geckodriver.exe', col_name='Preference Center URL', progress_callback=update_progress)
                     urls_processed = process_urls(df,
                                                   start_row,
                                                   end_row,
@@ -143,6 +153,13 @@ def upload_page():
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
+
+
+
+
+
+
+
 
 
 def about_page():
