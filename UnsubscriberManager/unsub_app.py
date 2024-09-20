@@ -80,8 +80,8 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
     finally:
         driver.quit()
         logging.info(f"Total URLs processed: {total_urls_processed}")
+        return total_urls_processed
 
-    return total_urls_processed
 
 
 def upload_page():

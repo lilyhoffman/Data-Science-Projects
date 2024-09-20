@@ -13,12 +13,13 @@ import traceback
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
 def process_urls(df, start_row, end_row, batch_size, chrome_path, col_name, progress_callback):
     options = Options()
-    options.add_argument("--headless")  # Run browser in headless mode
-    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
     options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    # Initialize Chrome service
     service = ChromeService(executable_path=chrome_path)
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -75,9 +76,7 @@ def process_urls(df, start_row, end_row, batch_size, chrome_path, col_name, prog
     finally:
         driver.quit()
         logging.info(f"Total URLs processed: {total_urls_processed}")
-
-    return total_urls_processed
-
+        return total_urls_processed
 
 def upload_page():
     st.title('Unsubscribe Assistant')
@@ -123,7 +122,11 @@ def upload_page():
         with col2:
             end_row = st.number_input("End Row", min_value=0, value=len(df), max_value=len(df))
 
-        if st.button('Process URLs'):
+        if st.button('Stop Current Process'):
+            st.error(f"Stopped.")
+            st.stop()
+
+        if st.button('Click to Process URLs'):
             progress_bar = st.progress(0)
             status_text = st.empty()
 
@@ -138,12 +141,19 @@ def upload_page():
                                                   start_row,
                                                   end_row,
                                                   batch_size=10,
-                                                  chrome_path='./bin/chromedriver',
+                                                  chrome_path='./bin/chromedriver.exe',
                                                   col_name='Preference Center URL',
                                                   progress_callback=update_progress)
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
+
+
+
+
+
+
+
 
 
 def about_page():
@@ -167,6 +177,7 @@ def about_page():
         - Add other buttons/functions that could be user-friendly
         - stop/pause button
         - silence the pinging
+        - ISSUE WITH DRIVER (last step you should do, add stop/pause button, silence ping first)
 
     """)
     st.title('Contact')
