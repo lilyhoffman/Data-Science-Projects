@@ -9,8 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import traceback
-
-
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 # Configure logging
@@ -24,7 +23,7 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
     # Add a preference to mute audio
     options.set_preference("media.volume_scale", "0.0")
 
-    service = FirefoxService(service=gecko_path)
+    service = FirefoxService(GeckoDriverManager().install())
     driver = webdriver.Firefox(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
