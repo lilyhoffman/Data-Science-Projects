@@ -11,22 +11,25 @@ from selenium.webdriver.support import expected_conditions as EC
 import traceback
 from webdriver_manager.firefox import GeckoDriverManager
 
-
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import logging
+import time
+import traceback
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
-
-    # Add a preference to mute audio
     options.set_preference("media.volume_scale", "0.0")
-
     options.binary_location = 'C:/Program Files/Mozilla Firefox/firefox.exe'
 
     service = Service(GeckoDriverManager().install())
-
     driver = webdriver.Firefox(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
@@ -83,7 +86,6 @@ def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback
         driver.quit()
         logging.info(f"Total URLs processed: {total_urls_processed}")
         return total_urls_processed
-
 
 
 def upload_page():
