@@ -23,6 +23,8 @@ def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback
     # Add a preference to mute audio
     options.set_preference("media.volume_scale", "0.0")
 
+    options.binary_location = 'C:/Program Files/Mozilla Firefox/firefox.exe'
+
     service = Service(GeckoDriverManager().install())
 
     driver = webdriver.Firefox(service=service, options=options)
