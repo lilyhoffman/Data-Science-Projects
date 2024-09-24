@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1288893a-ea22-4797-aba8-c5bce0464d20" name="Changes" comment="" />
+    <list default="true" id="1288893a-ea22-4797-aba8-c5bce0464d20" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnsubscriberManager/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnsubscriberManager/test.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,22 +34,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.unsub_app.executor": "Run",
-    "Python.unsub_handler.executor": "Run",
-    "Python.unsubscriber_app.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unsub_app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unsub_handler.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unsubscriber_app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lilyh\Data-Science-Projects\UnsubscriberManager\bin" />
+      <recent name="C:\Users\lilyh\Data-Science-Projects\UnsubscriberManager\images" />
+      <recent name="C:\Users\lilyh\Data-Science-Projects\UnsubscriberManager" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -65,6 +76,10 @@
       <workItem from="1726173110742" duration="1418000" />
       <workItem from="1726174561902" duration="1733000" />
       <workItem from="1726177047608" duration="2361000" />
+      <workItem from="1726179734997" duration="13881000" />
+      <workItem from="1726252327163" duration="8653000" />
+      <workItem from="1726801716566" duration="10642000" />
+      <workItem from="1727208961260" duration="1002000" />
     </task>
     <servers />
   </component>
@@ -72,6 +87,8 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Data_Science_Projects$test.coverage" NAME="test Coverage Results" MODIFIED="1726802319248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UnsubscriberManager" />
+    <SUITE FILE_PATH="coverage/Data_Science_Projects$unsub_app.coverage" NAME="unsub_app Coverage Results" MODIFIED="1726181434351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UnsubscriberManager" />
     <SUITE FILE_PATH="coverage/unsub_handler_py$unsubscriber_app.coverage" NAME="unsubscriber_app Coverage Results" MODIFIED="1726174811689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UnsubscriberManager" />
     <SUITE FILE_PATH="coverage/unsub_handler_py$unsub_app.coverage" NAME="unsub_app Coverage Results" MODIFIED="1726177980011" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UnsubscriberManager" />
     <SUITE FILE_PATH="coverage/unsub_handler_py$unsub_handler.coverage" NAME="unsub_handler Coverage Results" MODIFIED="1726173115398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UnsubscriberHandler" />
