@@ -5,29 +5,40 @@ import time
 import logging
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import traceback
-import chromedriver_autoinstaller
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
 def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback):
-    options = Options()
+    options = webdriver.ChromeOptions()
+    options.set_capability(
+
+        "goog:loggingPrefs", {"performance": "ALL", "browser": "ALL"}
+
+    )
+
+    DRIVER_PATH = 'C:/Users/lilyh/Data-Science-Projects/UnsubscriberManager/bin/chromedriver.exe'
+
+    service = ChromeService(executable_path=DRIVER_PATH)
+    driver = webdriver.Chrome(service=service, options=options)
+
+
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-extensions")
+    options.add_argument("window-size=1920,1080")
 
-    # # Initialize Chrome service
-    # service = ChromeService(executable_path=chrome_path)
-    # driver = webdriver.Chrome(service=service, options=options)
-    driver = webdriver.Chrome()
+    # Add a preference to mute audio
+    options.add_argument("--mute-audio")
 
-    total_batches = ((end_row - start_row) //
-                     batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0))
+
+
+    total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
     total_urls = end_row - start_row
     total_urls_processed = 0
 
@@ -145,12 +156,12 @@ def upload_page():
                                                   start_row,
                                                   end_row,
                                                   batch_size=10,
+                                                  chromedriver_path='./bin/chromedriver.exe',  # Change gecko_path to chromedriver_path
                                                   col_name='Preference Center URL',
                                                   progress_callback=update_progress)
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
-
 
 def about_page():
     st.title('About')
@@ -185,7 +196,6 @@ def about_page():
     """)
     st.success("Developed by: Lily Hoffman")
 
-
 def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
@@ -194,7 +204,6 @@ def main():
         upload_page()
     elif page == "About":
         about_page()
-
 
 if __name__ == "__main__":
     main()

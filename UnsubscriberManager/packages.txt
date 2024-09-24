@@ -1,1 +1,3 @@
-firefox-esr
+google-chrome-stable
+chromium-chromedriver
+
