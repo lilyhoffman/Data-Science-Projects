@@ -15,26 +15,21 @@ import traceback
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback):
+
     options = webdriver.ChromeOptions()
-    options.set_capability(
+    options.set_capability("goog:loggingPrefs", {"performance": "ALL", "browser": "ALL"})
 
-        "goog:loggingPrefs", {"performance": "ALL", "browser": "ALL"}
+    # Use ChromeDriverManager to get the driver
+    service = ChromeService(ChromeDriverManager().install())
 
-    )
-
-    DRIVER_PATH = 'C:/Users/lilyh/Data-Science-Projects/UnsubscriberManager/bin/chromedriver.exe'
-
-    service = ChromeService(executable_path=DRIVER_PATH)
-    driver = webdriver.Chrome(service=service, options=options)
-
-
+    # Add other options
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-extensions")
     options.add_argument("window-size=1920,1080")
-
-    # Add a preference to mute audio
     options.add_argument("--mute-audio")
+
+    driver = webdriver.Chrome(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
     total_urls = end_row - start_row
