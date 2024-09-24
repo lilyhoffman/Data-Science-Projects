@@ -36,8 +36,6 @@ def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback
     # Add a preference to mute audio
     options.add_argument("--mute-audio")
 
-
-
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
     total_urls = end_row - start_row
     total_urls_processed = 0
