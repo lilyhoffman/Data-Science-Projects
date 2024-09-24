@@ -14,7 +14,7 @@ options.add_argument("--no-sandbox")  # Sandbox issues can cause crashes
 options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems in containers
 
 # Initialize the Chrome WebDriver
-service = ChromeService(executable_path='./bin/chromedriver')
+service = ChromeService(executable_path='./bin/chromedriver.exe')
 driver = webdriver.Chrome(service=service, options=options)
 
 # Open a URL
