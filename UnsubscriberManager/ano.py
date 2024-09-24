@@ -18,7 +18,7 @@ service = ChromeService(executable_path='./bin/chromedriver')
 driver = webdriver.Chrome(service=service, options=options)
 
 # Open a URL
-driver.get("https://www.example.com")
+driver.get("https://www.google.com")
 
 # Print the page title (to check if it's working)
 print(driver.title)
