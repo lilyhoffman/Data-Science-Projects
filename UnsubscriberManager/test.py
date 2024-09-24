@@ -3,7 +3,7 @@ import streamlit as st
 from selenium import webdriver
 import time
 import logging
-from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -23,7 +23,12 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
     # Add a preference to mute audio
     options.set_preference("media.volume_scale", "0.0")
 
-    service = FirefoxService(GeckoDriverManager().install())
+    # Configure the geckodriver service and specify the path if gecko_path is provided
+    if gecko_path:
+        service = Service(gecko_path)
+    else:
+        service = Service(GeckoDriverManager().install())
+
     driver = webdriver.Firefox(service=service, options=options)
 
     total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
