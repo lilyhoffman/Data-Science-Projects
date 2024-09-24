@@ -156,7 +156,7 @@ def upload_page():
                                                   start_row,
                                                   end_row,
                                                   batch_size=10,
-                                                  chromedriver_path='./bin/chromedriver.exe',  # Change gecko_path to chromedriver_path
+                                                  # chromedriver_path='./bin/chromedriver.exe',  # Change gecko_path to chromedriver_path
                                                   col_name='Preference Center URL',
                                                   progress_callback=update_progress)
                     st.success(f"Processing complete!")
