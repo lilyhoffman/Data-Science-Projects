@@ -16,18 +16,14 @@ from webdriver_manager.firefox import GeckoDriverManager
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
+def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
 
     # Add a preference to mute audio
     options.set_preference("media.volume_scale", "0.0")
 
-    # Configure the geckodriver service and specify the path if gecko_path is provided
-    if gecko_path:
-        service = Service(gecko_path)
-    else:
-        service = Service(GeckoDriverManager().install())
+    service = Service(GeckoDriverManager().install())
 
     driver = webdriver.Firefox(service=service, options=options)
 
@@ -151,7 +147,7 @@ def upload_page():
                                                   start_row,
                                                   end_row,
                                                   batch_size=10,
-                                                  gecko_path='./bin/geckodriver.exe',
+                                                  # gecko_path='./bin/geckodriver.exe',
                                                   col_name='Preference Center URL',
                                                   progress_callback=update_progress)
                     st.success(f"Processing complete!")
