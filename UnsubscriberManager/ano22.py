@@ -9,21 +9,25 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import traceback
+import chromedriver_autoinstaller
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def process_urls(df, start_row, end_row, batch_size, chrome_path, col_name, progress_callback):
+
+def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    # Initialize Chrome service
-    service = ChromeService(executable_path=chrome_path)
-    driver = webdriver.Chrome(service=service, options=options)
+    # # Initialize Chrome service
+    # service = ChromeService(executable_path=chrome_path)
+    # driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome()
 
-    total_batches = (end_row - start_row) // batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0)
+    total_batches = ((end_row - start_row) //
+                     batch_size + (1 if (end_row - start_row) % batch_size != 0 else 0))
     total_urls = end_row - start_row
     total_urls_processed = 0
 
@@ -141,19 +145,11 @@ def upload_page():
                                                   start_row,
                                                   end_row,
                                                   batch_size=10,
-                                                  chrome_path='./bin/chromedriver.exe',
                                                   col_name='Preference Center URL',
                                                   progress_callback=update_progress)
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
-
-
-
-
-
-
-
 
 
 def about_page():

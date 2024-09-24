@@ -10,6 +10,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import traceback
 
+
+
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -17,6 +20,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progress_callback):
     options = Options()
     options.add_argument("--headless")
+
+    # Add a preference to mute audio
+    options.set_preference("media.volume_scale", "0.0")
+
     service = FirefoxService(service=gecko_path)
     driver = webdriver.Firefox(service=service, options=options)
 
@@ -73,8 +80,8 @@ def process_urls(df, start_row, end_row, batch_size, gecko_path, col_name, progr
     finally:
         driver.quit()
         logging.info(f"Total URLs processed: {total_urls_processed}")
+        return total_urls_processed
 
-    return total_urls_processed
 
 
 def upload_page():
@@ -146,6 +153,10 @@ def upload_page():
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
+
+
+
+
 
 
 
