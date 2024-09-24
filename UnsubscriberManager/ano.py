@@ -1,27 +1,45 @@
+import streamlit as st
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 
-# Set Chrome options
-options = Options()
 
-# Add headless argument to run browser without GUI
-options.add_argument("--headless")
+# Function to test headless Chrome
+def test_headless():
+    # Set Chrome options for headless mode
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
-# Additional options to avoid issues
-options.add_argument("--disable-gpu")  # Disable GPU acceleration (recommended for headless)
-options.add_argument("--no-sandbox")  # Sandbox issues can cause crashes
-options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems in containers
+    # Initialize the WebDriver
+    service = ChromeService(executable_path='./bin/chromedriver')  # Update path to chromedriver
+    driver = webdriver.Chrome(service=service, options=options)
 
-# Initialize the Chrome WebDriver
-service = ChromeService(executable_path='./bin/chromedriver.exe')
-driver = webdriver.Chrome(service=service, options=options)
+    try:
+        # Open a test URL
+        test_url = "https://www.example.com"
+        driver.get(test_url)
 
-# Open a URL
-driver.get("https://www.google.com")
+        # Extract and return the page title
+        page_title = driver.title
+        return page_title
+    except Exception as e:
+        return f"Error: {e}"
+    finally:
+        # Close the browser
+        driver.quit()
 
-# Print the page title (to check if it's working)
-print(driver.title)
 
-# Close the browser
-driver.quit()
+# Streamlit UI
+st.title("Headless Browser Test")
+
+# Button to run the test
+if st.button("Run Headless Test"):
+    with st.spinner("Running headless test..."):
+        result = test_headless()
+
+    # Display the result
+    st.write("Test Result:")
+    st.success(result if "Error" not in result else result)
