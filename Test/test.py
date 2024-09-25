@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.service import Service
 import streamlit as st
 from webdriver_manager.chrome import ChromeDriverManager
 
+
 # Service('./chromedriver.exe')
 # Function to process the URL
 def process_url(url):
