@@ -2,18 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import streamlit as st
 # from webdriver_manager.chrome import ChromeDriverManager
-
+import os
 
 # Service('./chromedriver.exe')
 # Function to process the URL
 def process_url(url):
     # service=Service(ChromeDriverManager().install())
-    service = Service('chromedriver')
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(options=options, service=service)
-    return driver.get(url)
+    # service = Service('chromedriver')
+    # options = webdriver.ChromeOptions()
+    # options.add_experimental_option("detach", True)
+    # driver = webdriver.Chrome(options=options, service=service)
 
+    driver = webdriver.Chrome(os.getcwd() + "chromedriver")
+    return driver.get(url)
 
 # Function to handle file upload and process URL (add URL input in Streamlit)
 def upload_page():
