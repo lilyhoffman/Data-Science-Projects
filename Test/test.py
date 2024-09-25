@@ -1,15 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import streamlit as st
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 import os
 
 # Service('./chromedriver.exe')
 # Function to process the URL
 
 def process_url(url):
-    service=Service(ChromeDriverManager().install())
-    # service = Service('chromedriver')
+    # service=Service(ChromeDriverManager().install())
+    service = Service('chromedriver')
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=options, service=service)
