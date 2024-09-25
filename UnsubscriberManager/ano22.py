@@ -122,6 +122,8 @@ def process_urls(logpath, proxy, df, start_row, end_row, batch_size, col_name, p
 
 
 def upload_page():
+    logpath = "webdriver.log"
+    proxy = None
     st.title('Unsubscribe Assistant')
     st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
 
@@ -180,7 +182,8 @@ def upload_page():
 
             with st.spinner("Processing URLs..."):
                 try:
-                    urls_processed = process_urls(df,
+                    urls_processed = process_urls(logpath,
+                                                  proxy,
                                                   start_row,
                                                   end_row,
                                                   batch_size=10,
