@@ -1,20 +1,26 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 import streamlit as st
-# from webdriver_manager.chrome import ChromeDriverManager
 import os
 
-# Service('./chromedriver.exe')
 # Function to process the URL
 def process_url(url):
-    # service=Service(ChromeDriverManager().install())
-    # service = Service('chromedriver')
-    # options = webdriver.ChromeOptions()
-    # options.add_experimental_option("detach", True)
-    # driver = webdriver.Chrome(options=options, service=service)
+    # Set up Chrome options
+    chrome_options = Options()
+    chrome_options.add_experimental_option("detach", True)
 
-    driver = webdriver.Chrome(os.getcwd() + "chromedriver")
-    return driver.get(url)
+    # Path to chromedriver (ensure it's executable and in the correct location)
+    chromedriver_path = os.path.join(os.getcwd(), "chromedriver")
+
+    # Set up the service for ChromeDriver
+    service = Service(chromedriver_path)
+
+    # Initialize WebDriver
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    # Open the URL
+    driver.get(url)
 
 # Function to handle file upload and process URL (add URL input in Streamlit)
 def upload_page():
@@ -28,7 +34,6 @@ def upload_page():
         process_url(url)
         st.success(f"Processed URL: {url}")
 
-
 # Main function
 def main():
     st.sidebar.title("Navigation")
@@ -38,10 +43,6 @@ def main():
         upload_page()
     elif page == "About":
         st.write("This is the 'About' page.")
-
-    # You can test the process_url function directly here if needed
-    # process_url('https://www.ukg.co.uk/subscription/preferences?hid=CKRNS000004851512')
-
 
 if __name__ == "__main__":
     main()
