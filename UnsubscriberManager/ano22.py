@@ -56,7 +56,7 @@ def process_urls(logpath, proxy, df, start_row, end_row, batch_size, col_name, p
     total_urls_processed = 0
 
     try:
-        with webdriver.Chrome(service=service, options=options) as driver:  # Indentation corrected
+        with webdriver.Chrome(service=service, options=options) as driver:
             for batch_num in range(total_batches):
                 start_index = start_row + batch_num * batch_size
                 end_index = min(start_row + (batch_num + 1) * batch_size, end_row)
@@ -184,15 +184,16 @@ def upload_page():
                 try:
                     urls_processed = process_urls(logpath,
                                                   proxy,
+                                                  df,
                                                   start_row,
-                                                  end_row,
+                                                  end_row,  # Correctly passing the end_row argument here
                                                   batch_size=10,
-                                                  # chromedriver_path='./bin/chromedriver.exe',  # Change gecko_path to chromedriver_path
                                                   col_name='Preference Center URL',
                                                   progress_callback=update_progress)
                     st.success(f"Processing complete!")
                 except Exception as e:
                     st.error(f"Error during processing: {e}")
+
 
 def about_page():
     st.title('About')
@@ -227,6 +228,7 @@ def about_page():
     """)
     st.success("Developed by: Lily Hoffman")
 
+
 def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Select a page", ["Upload", "About"])
@@ -235,6 +237,7 @@ def main():
         upload_page()
     elif page == "About":
         about_page()
+
 
 if __name__ == "__main__":
     main()
