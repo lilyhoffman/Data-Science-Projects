@@ -7,8 +7,8 @@ import streamlit as st
 # Service('./chromedriver.exe')
 # Function to process the URL
 def process_url(url):
-    # service=Service(ChromeDriverManager().install())
-    service = Service('./chromedriver.exe')
+    service=Service(ChromeDriverManager().install())
+    # service = Service('./chromedriver.exe')
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=options, service=service)
