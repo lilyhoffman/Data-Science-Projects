@@ -1,0 +1,31 @@
+# Instructions to Set Up Python in VSCode
+
+1. **Download and Install Python:**
+    - Go to the official Python website: https://www.python.org/downloads/
+    - Download the latest version of Python.
+    - Run the installer and make sure to check the box that says "Add Python to PATH".
+    - Complete the installation process.
+
+2. **Install Visual Studio Code (VSCode):**
+    - Go to the official VSCode website: https://code.visualstudio.com/
+    - Download the installer for your operating system.
+    - Run the installer and follow the instructions to install VSCode.
+
+3. **Install Python Extension for VSCode:**
+    - Open VSCode.
+    - Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing `Ctrl+Shift+X`.
+    - In the search box, type "Python" and select the extension provided by Microsoft.
+    - Click the "Install" button.
+
+4. **Verify Python Installation:**
+    - Open a new terminal in VSCode by going to `View > Terminal` or pressing ``Ctrl+` ``.
+    - Type `python --version` and press Enter. You should see the version of Python you installed.
+
+5. **Create a Python File:**
+    - Open a new file in VSCode by going to `File > New File` or pressing `Ctrl+N`.
+    - Save the file with a `.py` extension, for example, `hello.py`.
+
+7. **Install Firefox:**
+Since the provided code uses Selenium with Firefox, ensure you have Firefox installed on your machine.
+
+You are now set up to work with Python in VSCode!
