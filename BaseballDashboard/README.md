@@ -2,7 +2,7 @@
 
 Dataset is from the Lahman's Baseball dataset located on [data.world](https://data.world/bgadoci/lahmans-baseball-database)
 
-The dashboard uses three tables, two from the Baseball Dataset, and one that is a reference table for statistics and their explinations.
+The dashboard uses three tables, two from the Baseball Dataset, and one that is a reference table for statistics and their explanations.
 
 In ```data/``` there are three CSV files that are used to load the data to their respective tables, based off the CSV name.
 
