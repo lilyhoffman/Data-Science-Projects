@@ -8,7 +8,7 @@ from src.embedding_model import get_embedding
 
 # create an embedding based on user input
 def encode_text(info, model_choice):
-
+    
     return get_embedding(info, model_choice)
 
 # create the Chroma client; need PersistentClient and not Client because we do not want

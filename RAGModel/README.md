@@ -52,7 +52,7 @@ To run the Redis server and other dependencies, you must install Docker:
 ## How to Run
 1. Clone the repository:  
   ```bash
-  git clone https://github.com/Mihalis-Koutouvos/DS4300_Practical_2_LLM_Analysis.git
+  git clone https://github.com/lilyhoffman/Data-Science-Projects.git
   ```
 
 2. Install required packages and libaries

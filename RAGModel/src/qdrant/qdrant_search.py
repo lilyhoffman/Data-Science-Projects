@@ -77,7 +77,7 @@ Answer:"""
     if llm_choice == 1:
         # Generate response using Ollama
         response = ollama.chat(
-            model="llama3.2:latest", messages=[{"role": "user", "content": prompt}]
+            model="llama3.2:1b", messages=[{"role": "user", "content": prompt}]
         )
 
         

@@ -1,5 +1,3 @@
-## DS 4300 Example - from docs
-
 import ollama
 import redis
 import numpy as np
