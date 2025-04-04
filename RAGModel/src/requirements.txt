@@ -1,0 +1,24 @@
+# Core packages
+numpy
+fitz  # Alias; this actually requires PyMuPDF
+PyMuPDF
+nltk     # for stopwords and other NLP tools
+
+# Redis (with vector search support)
+redis>=4.5.5
+redisearch  # May be needed for vector fields and queries
+
+# ChromaDB
+chromadb
+
+# Qdrant client
+qdrant-client
+
+# Memory profiler
+memory-profiler
+
+# Sentence transformers (commented in your code, include if needed)
+sentence-transformers
+
+# Ollama client
+ollama
