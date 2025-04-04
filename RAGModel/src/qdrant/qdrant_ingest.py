@@ -3,8 +3,6 @@ import numpy as np
 import fitz
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
-from qdrant_client.http.models import ScoredPoint
-import ollama
 import uuid
 import time
 from memory_profiler import memory_usage

@@ -6,11 +6,6 @@ from memory_profiler import memory_usage
 from src.embedding_model import get_embedding
 
 
-# create an embedding based on user input
-def encode_text(info, model_choice):
-    
-    return get_embedding(info, model_choice)
-
 # create the Chroma client; need PersistentClient and not Client because we do not want
 # data disappearing
 def create_chroma_client(path="./chroma_db"):
@@ -38,7 +33,7 @@ def log_chroma_performance(start_time, memory_usage, end_time):
 
 # obtain embeddings, create ids for them, and proceed to store them
 def store_embedding(info, chunk_size, model_choice):
-    information = encode_text(info, model_choice)
+    information = get_embedding(info, model_choice)
     stored_collection = create_chroma_client()
 
     # create an id and then add it to the stored collection, also handle duplicates

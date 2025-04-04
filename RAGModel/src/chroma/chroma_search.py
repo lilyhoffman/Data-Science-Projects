@@ -12,19 +12,12 @@ chroma_client = chromadb.PersistentClient(path="./chroma_db")
 stored_collection = chroma_client.get_or_create_collection(name="ds4300_course_notes")
 
 
-# create an embedding for a query
-def encode_text(info, model_choice):
-    response = get_embedding(info, model_choice)
-
-    return response
-
-
 # begin searching the embeddings
 def search_embeddings(query, model_choice, top_k=3, chunk_size=None, overlap=None):
     start_time = time.time() 
 
     # encode
-    encode_query = encode_text(query, model_choice)
+    encode_query = get_embedding(query, model_choice)
 
     # build metadata filter if specified
     filter_conditions = {}
@@ -59,15 +52,10 @@ def search_embeddings(query, model_choice, top_k=3, chunk_size=None, overlap=Non
         chunk_size = obtained_meta[i].get("chunk_size", "Unknown Size") if i < len(obtained_meta) and isinstance(obtained_meta[i], dict) else "Unknown Size"
 
 
-    end_time = time.time()  # End timing
+    end_time = time.time()  
     print(f"Embedding search time: {end_time - start_time:.4f} seconds")
 
     return obtained_documents
-
-
-
-
-
 
 
 def generate_rag_response(query, context_results, llm_choice):

@@ -1,7 +1,7 @@
 # RAG-volution: Retrieval-Augmented Generation System  
 
 ## Overview  
-RAG-volution is a Retrieval-Augmented Generation (RAG) system that allows users to query a collection of DS4300 course notes and receive accurate, context-driven responses. Our system leverages document ingestion, embedding indexing, and locally-run large language models (LLMs) to optimize retrieval and synthesis of information.  
+RAG-volution is a Retrieval-Augmented Generation (RAG) system that allows users to query a collection of DS4300 (Large Scale Information Storage and Retrieval) course notes and receive accurate, context-driven responses. The system leverages document ingestion, embedding indexing, and locally-run large language models (LLMs) to optimize retrieval and synthesis of information. The students were able to use the RAG system they developed on their midterm for this course.
 
 ## Features  
 - **Efficient Document Retrieval**: Uses vector databases to store and retrieve relevant course materials.  

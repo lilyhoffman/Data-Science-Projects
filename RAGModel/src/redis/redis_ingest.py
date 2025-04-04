@@ -1,7 +1,5 @@
-import ollama
 import redis
 import numpy as np
-from redis.commands.search.query import Query
 import os
 import fitz
 from src.embedding_model import get_embedding
@@ -16,15 +14,15 @@ DOC_PREFIX = "doc:"
 DISTANCE_METRIC = "COSINE"
 
 
-# used to clear the redis vector store
 def clear_redis_store():
+    """ Clears the redis vector store """
     print("Clearing existing Redis store...")
     redis_client.flushdb()
     print("Redis store cleared.")
 
 
-# Create an HNSW index in Redis
 def create_hnsw_index():
+    """ Creates an HNSW index in Redis & querying vector embeddings with similarity searches. """
     try:
         redis_client.execute_command(f"FT.DROPINDEX {INDEX_NAME} DD")
     except redis.exceptions.ResponseError:
@@ -40,13 +38,8 @@ def create_hnsw_index():
     print("Index created successfully.")
 
 
-# Generate an embedding based on user input
-def encode_text(info, model_choice):
-    return get_embedding(info, model_choice)
-
-
-# store the embedding in Redis
 def store_embedding(file: str, page: str, chunk: str, embedding: list):
+    """ Store the embedding in Redis. """
     key = f"{DOC_PREFIX}:{file}_page_{page}_chunk_{chunk}"
     redis_client.hset(
         key,
@@ -62,7 +55,6 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
     print(f"Stored embedding for: {chunk}")
 
 
-# extract the text from a PDF by page
 def extract_text_from_pdf(pdf_path):
     """Extract text from a PDF file."""
     doc = fitz.open(pdf_path)
@@ -72,7 +64,6 @@ def extract_text_from_pdf(pdf_path):
     return text_by_page
 
 
-# split the text into chunks with overlap
 def split_text_into_chunks(text, chunk_size, overlap):
     """Split text into chunks of approximately chunk_size words with overlap."""
     words = text.split()
@@ -83,26 +74,26 @@ def split_text_into_chunks(text, chunk_size, overlap):
     return chunks
 
 
-# Process all PDF files in a given directory
-def process_pdfs(data_dir, model_choice, chunk_size, overlap):
 
+def process_pdfs(data_dir, model_choice, chunk_size, overlap):
+    """ Process all PDF files in a given directory. """
     for file_name in os.listdir(data_dir):
         if file_name.endswith(".pdf"):
             pdf_path = os.path.join(data_dir, file_name)
             text_by_page = extract_text_from_pdf(pdf_path)
+            
             for page_num, text in text_by_page:
                 chunks = split_text_into_chunks(text, chunk_size, overlap)
-                # print(f"  Chunks: {chunks}")
+                
                 for chunk_index, chunk in enumerate(chunks):
-                    # embedding = calculate_embedding(chunk)
                     embedding = get_embedding(chunk, model_choice)
                     store_embedding(
                         file=file_name,
                         page=str(page_num),
-                        # chunk=str(chunk_index),
                         chunk=str(chunk),
                         embedding=embedding,
                     )
+                    
             print(f" -----> Processed {file_name}")
 
 
@@ -134,7 +125,10 @@ def main():
     process_pdfs(path, model_choice, chunk_size, overlap)
     print("\n---Done processing PDFs---\n")
     
+    keys = redis_client.keys("doc:*")
 
+    for key in keys:
+        print(key.decode())
 
 if __name__ == "__main__":
     main()

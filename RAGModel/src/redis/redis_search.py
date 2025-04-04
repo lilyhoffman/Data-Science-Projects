@@ -1,38 +1,32 @@
 import redis
-import json
 import numpy as np
 import time
-#from sentence_transformers import SentenceTransformer
 import ollama
 from redis.commands.search.query import Query
-from redis.commands.search.field import VectorField, TextField
 from src.embedding_model import get_embedding
 
 
-# Initialize models
+# Initialize Redis
 redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True)
+
 
 INDEX_NAME = "embedding_index"
 DOC_PREFIX = "doc:"
 DISTANCE_METRIC = "COSINE"
 
-# generate embedding based on user input
-def find_embedding(text, model):
-    response = get_embedding(text, model)
-    return response
-
 
 def search_embeddings(query, model_choice, top_k=3):
+    """
+        Performs a vector similarity search using Redis and embeddings, 
+        letting you find the most relevant document chunks based on a query. 
+    """
     start_time = time.time() 
-    query_embedding = find_embedding(query, model_choice)
-    # Convert embedding to bytes for Redis search
+    query_embedding = get_embedding(query, model_choice)
+    
+    # Convert embedding to byte format (binary data) for Redis search
     query_vector = np.array(query_embedding, dtype=np.float32).tobytes()
 
     try:
-        # Construct the vector similarity search query
-        # Use a more standard RediSearch vector search syntax
-        # q = Query("*").sort_by("embedding", query_vector)
-
         q = (
             Query("*=>[KNN 5 @embedding $vec AS vector_distance]")
             .sort_by("vector_distance")
@@ -40,7 +34,7 @@ def search_embeddings(query, model_choice, top_k=3):
             .dialect(2)
         )
 
-        # Perform the search
+        # Executes the vector search
         results = redis_client.ft(INDEX_NAME).search(
             q, query_params={"vec": query_vector}
         )
@@ -62,8 +56,9 @@ def search_embeddings(query, model_choice, top_k=3):
                 f"---> File: {result['file']}, Page: {result['page']}, Chunk: {result['chunk']}"
             )
         
-        end_time = time.time()  # End timing
+        end_time = time.time()  
         print(f"🔹 Embedding search time: {end_time - start_time:.4f} seconds")
+       # testing
 
         return top_results
 
@@ -100,7 +95,7 @@ Answer:"""
     if llm_choice == 1:
         # Generate response using Ollama
         response = ollama.chat(
-            model="llama3.2:latest", messages=[{"role": "user", "content": prompt}]
+            model="llama3.2:1b", messages=[{"role": "user", "content": prompt}]
         )
     
     elif llm_choice == 2:
@@ -109,7 +104,7 @@ Answer:"""
             model="mistral", messages=[{"role": "user", "content": prompt}]
         )
 
-    end_time = time.time()  # End timing
+    end_time = time.time() 
     print(f"🔹 Response generation time: {end_time - start_time:.4f} seconds")
 
     return response["message"]["content"]
