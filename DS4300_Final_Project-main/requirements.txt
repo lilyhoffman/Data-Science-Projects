@@ -1,5 +1,0 @@
-streamlit
-boto3
-python-dotenv
-pymysql
-seaborn

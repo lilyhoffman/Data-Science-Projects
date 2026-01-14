@@ -4,6 +4,7 @@ import os
 import fitz
 from src.embedding_model import get_embedding
 
+
 # Initialize Redis connection
 redis_client = redis.Redis(host="localhost", port=6379, db=0)
 
@@ -95,7 +96,6 @@ def process_pdfs(data_dir, model_choice, chunk_size, overlap):
                     )
                     
             print(f" -----> Processed {file_name}")
-
 
 
 def main():

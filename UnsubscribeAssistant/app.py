@@ -59,6 +59,7 @@ def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback
                         logging.info(f"Checkbox already selected on {url}")
                     time.sleep(1)
 
+                    # submitting the form
                     submit_button = WebDriverWait(driver, 10).until(
                         EC.element_to_be_clickable((By.ID, 'edit-actions-submit'))
                     )
@@ -83,6 +84,7 @@ def process_urls(df, start_row, end_row, batch_size, col_name, progress_callback
         return total_urls_processed
 
 def upload_page():
+    """ Creating the user-friendly streamlit application. """
     st.title('Unsubscribe Assistant')
     st.info("Upload an Excel file with a sheet containing the column header 'Preference Center URL'")
 

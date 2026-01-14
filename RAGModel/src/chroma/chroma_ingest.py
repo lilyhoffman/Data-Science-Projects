@@ -17,10 +17,6 @@ def create_chroma_client(path="./chroma_db"):
 
     return client.get_or_create_collection(name="ds4300_course_notes")
 
-"""chroma_client = chromadb.PersistentClient(path="./chroma_db")
-
-#Create collection to index; pulling from existing preprocesed data
-stored_collection = chroma_client.get_or_create_collection(name="ds4300_course_notes")"""
 
 # compute time and memory usage of db
 def log_chroma_performance(start_time, memory_usage, end_time):

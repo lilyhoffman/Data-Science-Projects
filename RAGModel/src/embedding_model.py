@@ -12,22 +12,6 @@ def get_embedding(text: str, model_choice: int):
     Get the embedding based on the selected model.
     :param text: The text to embed
     :param model_choice: The model choice (1, 2, or 3)
-    :return: The embedding as a list
-    """
-from sentence_transformers import SentenceTransformer
-import ollama
-
-# Initialize the SentenceTransformer models once at the start
-embedding_model_1 = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-embedding_model_2 = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
-embedding_model_3 = 'mxbai-embed-large'
-
-
-def get_embedding(text: str, model_choice: int):
-    """
-    Get the embedding based on the selected model.
-    :param text: The text to embed
-    :param model_choice: The model choice (1, 2, or 3)
     :return: The embedding as a list or None if an error occurs
     """
     # Validate model_choice input

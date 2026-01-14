@@ -7,7 +7,7 @@ from src.embedding_model import get_embedding
 
 
 # Initialize Redis
-redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True)
+redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True, db=1)
 
 
 INDEX_NAME = "embedding_index"
@@ -72,7 +72,7 @@ def generate_rag_response(query, context_results, llm_choice):
     # Prepare context string
     context_str = "\n".join(
         [
-            f"From {result.get('file', 'Unknown file')} (page {result.get('page', 'Unknown page')}, chunk {result.get('chunk', 'Unknown chunk')}) "
+            f"From {result.get('file', 'Unknown file')} (page {result.get('page', 'Unknown page')}, chunk {result.get('chunk', 'Unknown chunk')})"
             f"with similarity {float(result.get('similarity', 0)):.2f}"
             for result in context_results
         ]

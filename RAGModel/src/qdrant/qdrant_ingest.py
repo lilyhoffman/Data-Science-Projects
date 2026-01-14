@@ -10,7 +10,7 @@ from src.embedding_model import get_embedding
 
 
 # Qdrant Client Setup
-qdrant_client = QdrantClient("localhost", port=6333)  # Adjust as per your setup
+qdrant_client = QdrantClient("localhost", port=6333)  
 
 # Qdrant Collection Name and Vector Dimension
 COLLECTION_NAME = "pdf_embeddings"
@@ -26,7 +26,7 @@ def create_qdrant_collection(VECTOR_DIM):
     qdrant_client.create_collection(
         collection_name=COLLECTION_NAME,
         vectors_config=VectorParams(
-        size=VECTOR_DIM,  # Vector dimension (must match your embedding model output)
+        size=VECTOR_DIM,  # Vector dimension
         distance=Distance.COSINE  # Similarity metric
     )
     )

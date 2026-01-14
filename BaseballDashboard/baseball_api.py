@@ -21,10 +21,9 @@ class BaseballApi:
     
     @staticmethod
     def get_team_stat_list():
-        """ Returns a list of the possible team statistics 
+        """ 
+        Returns a list of the possible team statistics 
 
-        Returns:
-            list: list of statistics column names
         """
         query = "SELECT value from team_columns_mapping"
         df = BaseballApi.execute(query)

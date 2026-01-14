@@ -25,29 +25,39 @@ def main():
 
     # Create the layout
     app.layout = html.Div([
-        html.H4('Baseball Team Comparison Dashboard'),
-        dcc.Graph(id="graph", style={'width': '100vw', 'height': '60vh'}),
+        html.H2('⚾ Baseball Team Comparison Dashboard', style={'textAlign': 'center', 'marginBottom': '30px'}),
 
-        html.P("Select Team 1:"),
-        dcc.Dropdown(id='team1', options=api.get_teams_list(), value='PHI'),
-        
-        html.P("Select Team 2:"),
-        dcc.Dropdown(id='team2', options=api.get_teams_list(), value= 'BOS'),
-        
-        html.P("Select Stat:"),
-        dcc.Dropdown(id='stat', options=api.get_team_stat_list(), value="Wins"),
+        dcc.Graph(id="graph", style={'width': '100%', 'height': '60vh'}),
 
-        html.P("Years:"),
-        dcc.RangeSlider(id='year_range', 
-                        min=1970, 
-                        max=2015, 
-                        step=10, 
-                        marks={i: '{}'.format(i) for i in range(1970,2015,10)},
-                        value=[1980, 2000]),
-        
-        
+        html.Div([
+            html.Div([
+                html.Label("Select Team 1:", style={'fontWeight': 'bold'}),
+                dcc.Dropdown(id='team1', options=api.get_teams_list(), value='PHI')
+            ], style={'width': '48%', 'paddingRight': '10px'}),
 
-    ])
+            html.Div([
+                html.Label("Select Team 2:", style={'fontWeight': 'bold'}),
+                dcc.Dropdown(id='team2', options=api.get_teams_list(), value='BOS')
+            ], style={'width': '48%', 'paddingLeft': '10px'}),
+        ], style={'display': 'flex', 'justifyContent': 'space-between', 'marginBottom': '20px'}),
+
+        html.Div([
+            html.Label("Select Stat:", style={'fontWeight': 'bold'}),
+            dcc.Dropdown(id='stat', options=api.get_team_stat_list(), value="Wins")
+        ], style={'marginBottom': '20px'}),
+
+        html.Div([
+            html.Label("Years:", style={'fontWeight': 'bold'}),
+            dcc.RangeSlider(
+                id='year_range',
+                min=1970,
+                max=2015,
+                step=1,
+                marks={i: str(i) for i in range(1970, 2016, 10)},
+                value=[1980, 2000]
+            )
+        ]),
+    ], style={'maxWidth': '900px', 'margin': 'auto', 'padding': '20px'})
 
 
 

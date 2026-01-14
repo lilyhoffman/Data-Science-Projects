@@ -6,7 +6,7 @@ Description: script to take csv files and turn them into tables in the baseball.
 import sqlite3
 import pandas as pd
 
-def load_data(table, csv, db,types:dict=None):
+def load_data(table, csv, db, types:dict=None):
     """ Loads data into a new or exisiting table in the given db file
 
     Args:
@@ -15,8 +15,10 @@ def load_data(table, csv, db,types:dict=None):
         db (string): path to .db file
         types (dict?): optional arg that allows passing of column types as a dict
     """
+    # creates connection
     conn = sqlite3.connect(db)
     
+    # manipulates df
     data_df = pd.read_csv(csv)
     data_df.to_sql(table, conn, if_exists='append', index=False, dtype=types)
     
