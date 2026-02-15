@@ -60,9 +60,9 @@ XGBoost achieved the highest performance with:
 ## Project Structure
 ├── app/
 │ └── Home.py
-├──── pages/
-│ └── About.py 
-│ └── Analytics_Dashboard.py 
+├── pages/
+│ ├── About.py
+│ └── Analytics_Dashboard.py
 ├── data/
 │ └── customer_churn_business_dataset.csv
 ├── requirements.txt
