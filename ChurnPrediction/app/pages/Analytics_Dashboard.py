@@ -127,21 +127,21 @@ with tab2:
     else:
         st.info("No columns available for churn rate.")
 
-st.divider()
-st.subheader("Feature By Churn Boxplot")
+    st.divider()
+    st.subheader("Feature By Churn Boxplot")
 
-# numeric columns only (excluding churn itself)
-num_cols = df_filt.select_dtypes(include="number").columns.tolist()
-num_cols = [c for c in num_cols if c not in ["churn"]]
+    # numeric columns only (excluding churn itself)
+    num_cols = df_filt.select_dtypes(include="number").columns.tolist()
+    num_cols = [c for c in num_cols if c not in ["churn"]]
 
-if not num_cols:
-    st.info("No numeric columns available for a boxplot.")
-else:
-    box_feature = st.selectbox(
-        "Select a numeric feature to compare by churn:",
-        num_cols,
-        key="box_feature"
-    )
+    if not num_cols:
+        st.info("No numeric columns available for a boxplot.")
+    else:
+        box_feature = st.selectbox(
+            "Select a numeric feature to compare by churn:",
+            num_cols,
+            key="box_feature"
+        )
 
     box_df = df_filt[["churn_label", box_feature]].dropna()
 
