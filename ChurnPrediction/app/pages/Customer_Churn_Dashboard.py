@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 # Page config
 st.set_page_config(page_title="Customer Churn Dashboard", layout="wide")
@@ -126,8 +127,42 @@ with tab2:
     else:
         st.info("No columns available for churn rate.")
 
+st.divider()
+st.subheader("Feature By Churn Boxplot")
+
+# numeric columns only (excluding churn itself)
+num_cols = df_filt.select_dtypes(include="number").columns.tolist()
+num_cols = [c for c in num_cols if c not in ["churn"]]
+
+if not num_cols:
+    st.info("No numeric columns available for a boxplot.")
+else:
+    box_feature = st.selectbox(
+        "Select a numeric feature to compare by churn:",
+        num_cols,
+        key="box_feature"
+    )
+
+    box_df = df_filt[["churn_label", box_feature]].dropna()
+
+    if box_df.empty:
+        st.info("No data available for this feature after filtering.")
+    else:
+        chart = (
+            alt.Chart(box_df)
+            .mark_boxplot(color='steelblue')
+            .encode(
+                x=alt.X("churn_label:N", title="Churn"),
+                y=alt.Y(f"{box_feature}:Q", title=box_feature.replace("_", " ").title()),
+                tooltip=["churn_label", alt.Tooltip(f"{box_feature}:Q")]
+            )
+            .properties(height=350)
+        )
+        st.altair_chart(chart, use_container_width=True)
+
+
     st.divider()
-    st.subheader("Highest-risk groups (table)")
+    st.subheader("Highest-risk groups")
 
     # Choose categorical-ish columns for risk table
     cat_cols = df_filt.select_dtypes(exclude="number").columns.tolist()
