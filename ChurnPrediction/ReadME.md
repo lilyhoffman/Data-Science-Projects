@@ -63,7 +63,7 @@ XGBoost achieved the highest performance with:
 `pip install -r requirements.txt`
 
 ## Run Application
-python -m streamlit run home.py
+`python -m streamlit run home.py`
 
 ## Requirements
 - streamlit  
