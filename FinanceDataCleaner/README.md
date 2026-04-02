@@ -1,8 +1,5 @@
 # CSV Data Cleaner for Finances
 
-**DS4300 Final Project**
-**Team Members:** Lily, Heidi, Mihalis, and Maya
-
 This project allows users to upload raw financial CSV files (e.g., containing `Name`, `Age`, `Checking Account Balance`, etc.). It detects and removes faulty or missing entries, stores the cleaned version, and provides interactive graphs to visualize relationships within the data.
 
 
