@@ -17,7 +17,7 @@ if "churn" in df.columns:
 else:
     st.error("Dataset must contain a 'churn' column.")
     st.stop()
-
+ 
 # Sidebar filters
 st.sidebar.header("Filters")
 df_filt = df.copy()

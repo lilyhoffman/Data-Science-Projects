@@ -9,7 +9,7 @@ subscription-based industries such as **SaaS, telecom, and service businesses**.
 Customer churn, when a customer stops using a service, is a major business challenge because **retaining customers is far
 more cost-effective than acquiring new ones**. This dataset enables predictive modeling to identify customers who are at risk of leaving.
 """)
-
+ 
 st.markdown("## Target Variable")
 st.markdown("""
 - **`churn`**
