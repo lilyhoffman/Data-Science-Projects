@@ -1,4 +1,4 @@
-# Customer Churn Prediction and Analytics Dashboard
+# Customer Churn Prediction and Analytics Dashboard 
 An end-to-end machine learning and analytics project for predicting customer churn and visualizing customer behavior insights using Streamlit.
 
 This project combines interactive data exploration, multiple model comparison, ROC evaluation, threshold tuning, class imbalance handling, and gradient boosting optimization using XGBoost.
